@@ -1351,8 +1351,8 @@ function submitForm(e){
   const email = document.getElementById('f-email').value.trim();
   const phone = document.getElementById('f-phone').value.trim();
   const apt = document.getElementById('f-apt').value;
-  const checkin = document.getElementById('f-checkin').value;
-  const checkout = document.getElementById('f-checkout').value;
+  const cin = document.getElementById('f-checkin').value;
+  const cout = document.getElementById('f-checkout').value;
   const adults = document.getElementById('f-adults').value;
   const children = document.getElementById('f-children').value;
   const notes = document.getElementById('f-notes').value.trim();
@@ -1360,14 +1360,14 @@ function submitForm(e){
   const status = document.getElementById('formStatus');
   const btn = document.querySelector('.form-submit');
 
-  if (!name || !apt || !checkin || !checkout || (!email && !phone)) {
+  if (!name || !apt || !cin || !cout || (!email && !phone)) {
     status.textContent = 'Please complete all required fields and add at least one contact method: email or phone.';
     status.className = 'form-status error';
     return;
   }
 
   if (typeof emailjs === 'undefined') {
-    status.textContent = 'Email service not loaded. Please try again in a few seconds.';
+    status.textContent = 'Email service is not loaded. Please try again in a few seconds.';
     status.className = 'form-status error';
     console.error('EmailJS library not loaded');
     return;
@@ -1378,14 +1378,18 @@ function submitForm(e){
   status.textContent = 'Sending request...';
   status.className = 'form-status';
 
+  emailjs.init({
+    publicKey: EMAILJS_PUBLIC_KEY
+  });
+
   const templateParams = {
     title: 'Richiesta disponibilità WaCa',
     apartment: apt,
     name: name,
     email: email || '-',
     phone: phone || '-',
-    checkin: checkin,
-    checkout: checkout,
+    checkin: cin,
+    checkout: cout,
     nights: nights || '-',
     adults: adults,
     children: children,
