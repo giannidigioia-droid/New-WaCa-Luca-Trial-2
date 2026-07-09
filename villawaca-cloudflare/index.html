@@ -510,9 +510,6 @@ section{padding:7rem 3rem}
 <!-- EmailJS Integration -->
 <script src="https://cdn.jsdelivr.net/npm/@emailjs/browser@4/dist/build/index.min.js"></script>
 <script src="./emailjs-config.js"></script>
-<!-- EmailJS Integration -->
-<script src="https://cdn.jsdelivr.net/npm/@emailjs/browser@4/dist/build/index.min.js"></script>
-<script src="./emailjs-config.js"></script>
 
 <script>
 document.addEventListener("DOMContentLoaded", function () {
@@ -542,6 +539,7 @@ document.addEventListener("DOMContentLoaded", function () {
         status.textContent = "Request sent successfully. We will contact you soon.";
         status.className = "form-status success";
       }
+
       form.reset();
     })
     .catch(function (error) {
