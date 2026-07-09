@@ -510,5 +510,51 @@ section{padding:7rem 3rem}
 <!-- EmailJS Integration -->
 <script src="https://cdn.jsdelivr.net/npm/@emailjs/browser@4/dist/build/index.min.js"></script>
 <script src="./emailjs-config.js"></script>
+<!-- EmailJS Integration -->
+<script src="https://cdn.jsdelivr.net/npm/@emailjs/browser@4/dist/build/index.min.js"></script>
+<script src="./emailjs-config.js"></script>
 
+<script>
+document.addEventListener("DOMContentLoaded", function () {
+  const form = document.getElementById("bookingForm");
+  const status = document.getElementById("formStatus");
+
+  if (!form) {
+    console.error("Booking form not found: missing id='bookingForm'");
+    return;
+  }
+
+  form.addEventListener("submit", function (event) {
+    event.preventDefault();
+
+    if (status) {
+      status.textContent = "Sending request...";
+      status.className = "form-status";
+    }
+
+    emailjs.sendForm(
+      "service_udnxwt2",
+      "template_72hewse",
+      form
+    )
+    .then(function () {
+      if (status) {
+        status.textContent = "Request sent successfully. We will contact you soon.";
+        status.className = "form-status success";
+      }
+      form.reset();
+    })
+    .catch(function (error) {
+      console.error("EmailJS error:", error);
+
+      if (status) {
+        status.textContent = "Sorry, something went wrong. Please try again or contact us on WhatsApp.";
+        status.className = "form-status error";
+      }
+    });
+  });
+});
+</script>
+
+</body>
 </html>
