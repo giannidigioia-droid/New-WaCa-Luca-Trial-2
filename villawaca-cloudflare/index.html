@@ -505,9 +505,62 @@ section{padding:7rem 3rem}
 <!-- Rest of HTML content continues... -->
 <!-- For brevity, I'm keeping the structure but the original content should be preserved -->
 
-</body>
+<section id="booking">
+  <div class="booking-inner">
+    <p class="section-label">Booking</p>
+    <h2 class="section-title">Request your stay</h2>
 
-<!-- EmailJS Integration -->
+    <form id="bookingForm" class="booking-form">
+      <div class="form-row">
+        <div class="form-group">
+          <label class="form-label">Name</label>
+          <input name="name" type="text" class="form-control" required>
+        </div>
+
+        <div class="form-group">
+          <label class="form-label">Email</label>
+          <input name="email" type="email" class="form-control">
+        </div>
+      </div>
+
+      <div class="form-row">
+        <div class="form-group">
+          <label class="form-label">Phone</label>
+          <input name="phone" type="tel" class="form-control">
+        </div>
+
+        <div class="form-group">
+          <label class="form-label">Guests</label>
+          <input name="guests" type="number" min="1" class="form-control" required>
+        </div>
+      </div>
+
+      <div class="form-row">
+        <div class="form-group">
+          <label class="form-label">Check-in</label>
+          <input name="checkin" type="date" class="form-control" required>
+        </div>
+
+        <div class="form-group">
+          <label class="form-label">Check-out</label>
+          <input name="checkout" type="date" class="form-control" required>
+        </div>
+      </div>
+
+      <div class="form-group full">
+        <label class="form-label">Message</label>
+        <textarea name="message" class="form-control" rows="4"></textarea>
+      </div>
+
+      <button type="submit" class="btn btn-primary form-submit">
+        Request your stay
+      </button>
+
+      <p id="formStatus" class="form-status"></p>
+    </form>
+  </div>
+</section>
+  <!-- EmailJS Integration -->
 <script src="https://cdn.jsdelivr.net/npm/@emailjs/browser@4/dist/build/index.min.js"></script>
 <script src="./emailjs-config.js"></script>
 
