@@ -1338,47 +1338,80 @@ function calcNights(){
     el.value=n>0?n+' nights':'—';
   }
 }
+
 function submitForm(e){
   e.preventDefault();
-  const name=document.getElementById('f-name').value.trim();
-  const email=document.getElementById('f-email').value.trim();
-  const phone=document.getElementById('f-phone').value.trim();
-  const apt=document.getElementById('f-apt').value;
-  const cin=document.getElementById('f-checkin').value;
-  const cout=document.getElementById('f-checkout').value;
-  const status=document.getElementById('formStatus');
-  if(!name||!apt||!cin||!cout||(!email&&!phone)){
-    status.textContent='Please complete all required fields and add at least one contact method (email or phone).';
-    status.className='form-status error';
+
+  const EMAILJS_SERVICE_ID = 'service_udnxwt2';
+  const EMAILJS_TEMPLATE_ID = 'template_72hewse';
+  const EMAILJS_PUBLIC_KEY = '8lE8ILbaH1QxsXjFJ';
+
+  const name = document.getElementById('f-name').value.trim();
+  const email = document.getElementById('f-email').value.trim();
+  const phone = document.getElementById('f-phone').value.trim();
+  const apt = document.getElementById('f-apt').value;
+  const checkin = document.getElementById('f-checkin').value;
+  const checkout = document.getElementById('f-checkout').value;
+  const adults = document.getElementById('f-adults').value;
+  const children = document.getElementById('f-children').value;
+  const notes = document.getElementById('f-notes').value.trim();
+  const nights = document.getElementById('f-nights').value;
+  const status = document.getElementById('formStatus');
+  const btn = document.querySelector('.form-submit');
+
+  if (!name || !apt || !checkin || !checkout || (!email && !phone)) {
+    status.textContent = 'Please complete all required fields and add at least one contact method: email or phone.';
+    status.className = 'form-status error';
     return;
   }
-  const btn=document.querySelector('.form-submit');
-  btn.textContent='Sending…';
-  btn.disabled=true;
-  // EmailJS integration — replace with your service/template IDs
-  if(typeof emailjs!=='undefined'){
-    emailjs.send('service_udnxwt2','template_72hewse',{
-      apartment:apt,name,email,phone,
-      checkin:cin,checkout:cout,
-      adults:document.getElementById('f-adults').value,
-      children:document.getElementById('f-children').value,
-      notes:document.getElementById('f-notes').value,
-    }).then(()=>{
-      status.textContent='✓ Request sent. We will reply within 24 hours.';
-      status.className='form-status success';
-      document.getElementById('bookingForm').reset();
-    }).catch(()=>formError(status,btn));
-  } else {
-    // Fallback: WhatsApp redirect
-    const msg=encodeURIComponent(`Hello, I would like to request ${apt} from ${cin} to ${cout}. Name: ${name}. Contact: ${email||phone}`);
-    setTimeout(()=>{
-      window.open('https://wa.me/393200921182?text='+msg,'_blank');
-      status.textContent='✓ Opening WhatsApp with your request details.';
-      status.className='form-status success';
-      btn.textContent='Send request →';
-      btn.disabled=false;
-    },600);
+
+  if (typeof emailjs === 'undefined') {
+    status.textContent = 'Email service not loaded. Please try again in a few seconds.';
+    status.className = 'form-status error';
+    console.error('EmailJS library not loaded');
+    return;
   }
+
+  btn.textContent = 'Sending...';
+  btn.disabled = true;
+  status.textContent = 'Sending request...';
+  status.className = 'form-status';
+
+  const templateParams = {
+    title: 'Richiesta disponibilità WaCa',
+    apartment: apt,
+    name: name,
+    email: email || '-',
+    phone: phone || '-',
+    checkin: checkin,
+    checkout: checkout,
+    nights: nights || '-',
+    adults: adults,
+    children: children,
+    notes: notes || '-',
+    message: notes || '-'
+  };
+
+  emailjs.send(
+    EMAILJS_SERVICE_ID,
+    EMAILJS_TEMPLATE_ID,
+    templateParams,
+    EMAILJS_PUBLIC_KEY
+  )
+  .then(function () {
+    status.textContent = '✓ Request sent. We will reply within 24 hours.';
+    status.className = 'form-status success';
+    document.getElementById('bookingForm').reset();
+    btn.textContent = 'Send request →';
+    btn.disabled = false;
+  })
+  .catch(function (error) {
+    console.error('EmailJS error:', error);
+    status.textContent = 'Temporary issue sending the request. Please try again.';
+    status.className = 'form-status error';
+    btn.textContent = 'Send request →';
+    btn.disabled = false;
+  });
 }
 function formError(status,btn){
   status.textContent='Temporary issue. Please message us directly on WhatsApp.';
